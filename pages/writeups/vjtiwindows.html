@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~/writeups</title>
+</head>
+
+<style>
+    body {
+        font-family: 'Consolas', 'Courier New', monospace;
+        background-color: #300924;
+        color: #d0d0d0;
+    }
+
+    ol, ul {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    pre {
+        font-size: 10px;
+    }
+
+    h4 {
+        font-size: 14px;
+    }
+
+    a {
+        color: #8abeb7;
+        text-decoration: none;
+    }
+</style>
+
+<body>
+    <h5>Welcome@Visitors:~/writeups$ cat 'VJTI Windows Writeup'/writeup.txt</h5>
+    <hr><br>
+
+    <h4>Challenge - 1: Basic Rev 1</h4>
+    <ol>
+        <li>We just push the program into dogbolt website</li>
+        <li>It decompiles and we find a strcmp condition that compares to flag</li>
+        <li>We get the flag as: <pre>T915{5TR1NG5_4R3_N1C3}</pre></li>
+        <li>Hence this challenge is solved</li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+
+    <h4>Challenge - 2: Basic Rev 2</h4>
+    <ol>
+        <li>We just push the program onto the dogbolt website</li>
+        <li>It decompiles and we find a condition for correct:
+            <pre>if (*(arg1 - 0x64) != 0x54 || *(arg1 - 0x63) != 0x39 || *(arg1 - 0x62) != 0x31 || *(arg1 - 0x61) != 0x35.......</pre>
+        </li>
+        <li>It's just a bunch of hex values</li>
+        <li>We convert these hex values to ASCII: <pre>T915{1N5TRUC710NS_4R3_B3TT3R}</pre></li>
+        <li>Hence this challenge is solved</li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+
+    <h4>Challenge - 3: Basic Rev 3</h4>
+    <ol>
+        <li>We push the program onto the dogbolt website to decompile it.</li>
+        <li>The decompiled code shows a password validation loop:
+            <pre>if (**(arg1 - 0xc8) != (*rdx_5 ^ *(arg1 - 0x9b + rax_22))) break;</pre>
+        </li>
+        <li>It checks each input byte against a predefined byte sequence using XOR operations.</li>
+        <li>We analyze the memory initialization in the decompiled code and extract target values for validation.</li>
+        <li>We reverse the logic using a Python script:
+            <pre>
+# Initialize predefined values based on the memory setup.
+predefined_values = [ord(c) for c in "mt{p"] + [0x13] + [ord(c) for c in "fxy|nz"] + [
+    0x1b, 1, 0x66, 0x63, 4, 0x53, 0x7c, 0x2b, 0x1c, 0x0e
+] + [ord(c) for c in "d}Pc'>9MJEh/'5L8IDYV1[`2hNW4JaSiC"]
+
+# Extract the relevant 27-byte target sequence.
+target_values = predefined_values[-27:]  # Adjust based on exact indexing in memory.
+
+# Decode input by reversing XOR operation.
+input_chars = []
+for i in range(27):
+    input_char = target_values[i] ^ predefined_values[i]
+    input_chars.append(chr(input_char))
+
+# Join to form the password.
+correct_password = ''.join(input_chars)
+print("Correct password:", correct_password)
+            </pre>
+        </li>
+        <li>Running the program with the correct input gives the flag as: <pre>T915{I_L0V3_X0R_3NCRYP710N}</pre></li>
+        <li>Hence this challenge is solved.</li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+
+    <h4>Challenge - 4: Web Traffic Analysis</h4>
+    <ol>
+        <li>We download the Wireshark packet, it's a chunky boi</li>
+        <li>It has way too many packets to manually search through; also, the packets are confusing, sometimes it's torrenting, sometimes it's router logging</li>
+        <li>The best way to find the flag is by filtering the HTTP protocols</li>
+        <li>Set the filter as HTTP, but there are still too many packets to manually search</li>
+        <li>We filter for POST requests: <pre>http.request.method == "POST"</pre></li>
+        <li>We find a strange POST request with login credentials `admin` and `password@123`. Following the HTTP stream, we get the flag: <pre>T915{ST4HP_CR4WL1NG_MY_W3B}</pre></li>
+        <li>Hence this challenge is solved</li>
+    </ol>
+
+    <br><hr><br>
+
+    <a href="../writeups.html">cd ..</a>
+
+</body>
+
+</html>

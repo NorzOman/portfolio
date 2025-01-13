@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>~/writeups</title>
+</head>
+
+<style>
+    body {
+        font-family: 'Consolas', 'Courier New', monospace;
+        background-color: #300924;
+        color: #d0d0d0;
+    }
+
+    ol, ul {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    pre {
+        font-size: 10px;
+    }
+
+    h4 {
+        font-size: 14px;
+    }
+
+    a {
+        color: #8abeb7;
+        text-decoration: none;
+    }
+</style>
+
+<body>
+    <h5>Welcome@Visitors:~/writeups$ cat 'VJTI Android Writeup'/writeup.txt</h5>
+    <hr><br>
+
+
+    <h4>Challenge - 1: Simple Right?</h4>
+    <ol>
+        <li>We get the rev binary file</li>
+        <li>We go to dogbolt website to reverse this binary</li>
+        <li>We get the flag in the source code:
+            <pre>iVar1 = strcmp((char *)param_2[1],"T915{l3v3l1w45345y}");</pre>
+        </li>
+        <li>Hence we get the flag as: <pre>T915{l3v3l1w45345y}</pre></li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 2: Flipper</h4>
+    <ol>
+        <li>Another reversing challenge though this time there is a little bit of complexity as the flag is not in plain text but encoded</li>
+        <li>We reverse the binary using dogbolt to get the source of the binary</li>
+        <li>Then we find something interesting in the code:
+            <pre>if (strcmp(sp_1, "Q<40~G4qZCi4uZi66qZqw4ux"))</pre>
+        </li>
+        <li>This appears to be an encoded flag</li>
+        <li>Asking GPT to examine the code it returns with the idea that the flag is xor 5 encoded so we reverse it using a Python script:
+            <pre>
+    def xor_decode(encoded_str, xor_key=5):
+        decoded_str = ''.join(chr(ord(c) ^ xor_key) for c in encoded_str)
+        return decoded_str
+    
+    encoded_flag = "Q<40~G4qZCi4uZi66qZqw4ux"
+    decoded_flag = xor_decode(encoded_flag)
+    print(f"Decoded flag: {decoded_flag}")
+            </pre>
+        </li>
+        <li>This Python code returns the correct flag as: <pre>T915{B1t_Fl1p_l33t_tr1p}</pre></li>
+    </ol>
+    <h5>----------------------------------------------------</h5>
+    
+    <h4>Challenge - 3: Eagle-eyed</h4>
+    <ol>
+        <li>Download the APK</li>
+        <li>Decompile the APK using jadx:
+            <pre>jadx -d 'output-folder' 'apk-file'</pre>
+        </li>
+        <li>We can use appetize.io to see the APK in action and observe that the app shows the flag which quickly disappears</li>
+        <li>We can see the main activity of the application here:
+            <pre>/home/kali/Desktop/vjti/Eagle-Eyed/blitz_decompiled/sources/com/example/sharpsight/MainActivity.java</pre>
+        </li>
+        <li>We see this string that references the flag:
+            <pre>this.bFlag = getString(R.string.fakeflag);</pre>
+        </li>
+        <li>The flag is called from there which is then base64 decoded and then Caesar cipher decoded to get the flag</li>
+        <li>We find the fake flag in the file:
+            <pre>/home/kali/Desktop/vjti/Eagle-Eyed/blitz_decompiled/resources/res/values/strings.xml</pre>
+        </li>
+        <li>In the strings.xml we get the flag as:
+            <pre>QjkxNXtBcDR6eF81cW9wYl9hcDR6eDN6X3Uxdmx9</pre>
+        </li>
+        <li>First we base64 decode the flag using the command:
+            <pre>echo "QjkxNXtBcDR6eF81cW9wYl9hcDR6eDN6X3Uxdmx9" | base64 -d</pre>
+            <pre>B915{Ap4zx_5qopb_ap4zx3z_u1vl}</pre>
+        </li>
+        <li>But since we know the flag starts with T915 we use Caesar cipher to shift by 18 and we get the final flag:
+            <pre>T915{Sh4rp_5ight_sh4rp3r_m1nd}</pre>
+        </li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 4: Double Trouble</h4>
+    <ol>
+        <li>First, download the rev3 binary</li>
+        <li>We use dogbolt to decompile and get the string of the flag from the source code:
+            <pre>if (strcmp(sp_1, "P?73y|4vb4vh1gvj7jmTsvt4q1{"))</pre>
+        </li>
+        <li>We use chatgpt to analyze and figure out how this string is de-encoded. We figure it’s XOR with key 5 subtracted by 1</li>
+        <li>We use the Python code to find the flag:
+            <pre>
+    encoded_flag = "P?73y|4vb4vh1gvj7jmTsvt4q1{"
+    decoded_flag = ''.join(chr((ord(c) ^ 5) - 1) for c in encoded_flag)
+    print(decoded_flag)
+            </pre>
+        </li>
+        <li>We run this code and we get the final flag as:
+            <pre>T915{x0rf0rl3arn1ngPurp0s3}</pre>
+        </li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 5: Memory Reboot</h4>
+    <ol>
+        <li>Input: %~@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</li>
+        <li>Reason: Dangerous strcpy function
+            <pre>if (((*param_1 == '%') && (param_1[1] == '~')) && (param_1[2] == '@')) {
+        puts("Initial matched...;)");
+        strcpy(acStack_48,param_1);
+    }</pre>
+        </li>
+        <li>Output:
+            <pre>┌──(kali㉿kali)-[~/Desktop/vjti/memory_reboot]
+    └─$ ./run.sh ./rev4 %~@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Running the challenge binary in QEMU...
+    Binary: ./rev4
+    Argument: %~@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Welcome to the CrashMe challenge!
+    Initial matched...;)
+    Buffer content: %~@AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Congratulations! You triggered a segmentation fault now submit your input!</pre>
+        </li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 6: Rules and Regulation ~Credits = Krishna</h4>
+    <ol>
+        <li>We open the app in appetize.io and we see we have to click 999 times with a slider buffer every 10</li>
+        <li>We decompile it using jadx and find an interesting flagactivity.java</li>
+        <li>The flag_activity.java takes the secret3 and then passes it to native operation() function which is not readable</li>
+        <li>Method 1:
+            <ol>
+                <li>The manual way to get the flag will be easy if the APK was repatched</li>
+                <li>We get loop count >= 200 and then during the slider, slide to 602%, this results in the flag</li>
+                <li>We use apktool to decompile the APK</li>
+                <li>Modify the smali code to set the private const loopcount to > 200</li>
+                <li>Repatch the APK</li>
+                <li>Sign the APK</li>
+                <li>Finally, use appetize.io to render the APK, click 10 times, click button 9, go to slider 602%, and we get the flag</li>
+            </ol>
+        </li>
+        <li>Method 2:
+            <ol>
+                <li>Take the secret3 from the strings.xml:
+                    <pre>&lt;string name="secret3"&gt;MApVDEJxDVcCQVFoZQZHAEFEUTogWlIBWVdXQwlWXh8=</string></pre>
+                </li>
+                <li>Base64 decode the string to get the result</li>
+                <li>Reverse the libmyapp.so and analyze the XOR key</li>
+                <li>Perform the XOR operation and get the final flag: <pre>T915{Gh1dr4_R3v3rs3_Eng1n33r1ng}</pre></li>
+            </ol>
+        </li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 7: Deep Trouble</h4>
+    <ol>
+        <li>We open the app in appetize.io and see it opens a Rick Astley video</li>
+        <li>We hack into the VJTI network and leave 3 RAT Trojans for trying to rickroll me</li>
+        <li>We decompile the APK using jadx:
+            <pre>jadx -d ~/Desktop/vjti/deep_troubl/decompiled ~/Desktop/vjti/deep_troubl/deep_trouble.apk</pre>
+        </li>
+        <li>We analyze the WebActivity.java file and find an interesting line:
+            <pre>textView.setText("Hey! What do you think you're doing? You were supposed to watch Rick Astley!");</pre>
+        </li>
+        <li>We figure we need secret42 to find the flag, so we find it in the strings.xml</li>
+        <li>We deobfuscate the secret using a Python script:
+            <pre>
+    def deobfuscate_flag2(input_str):
+        sb = input_str[::-1]
+        result = ''
+        for i in range(len(sb)):
+            result += chr(ord(sb[i]) ^ 1)
+        return result
+    secrets = {'secret42': '|2b5gs2uo0^uq0sb%5w5K^3^4jo0Mz408U'}
+    flag = deobfuscate_flag2(secrets['secret42'])
+    print("Flag:", flag)
+            </pre>
+        </li>
+        <li>We get the flag as: <pre>T915{L1nk5_2_J4v4$cr1pt_1nt3rf4c3}</pre></li>
+    </ol>
+    <h5>---------------------------------------------------</h5>
+    
+    <h4>Challenge - 8: Stubborn as a Mule ~Credits = Krishna</h4>
+    <ol>
+        <li>We open the application and it checks two conditions: phone should not be rooted, and premium should be unlocked</li>
+        <li>We use apktool to decompile the application</li>
+        <li>Edit the smali code to set premium unlocked to true</li>
+        <li>Rebuild and sign the APK</li>
+        <li>Upload to appetize.io and prove both conditions are met, we get the flag as:
+            <pre>T915{FR1D4_G0D_PR41S3S_TH0U}</pre>
+        </li>
+    </ol>
+    
+    <br><hr><br>
+
+    <a href="../writeups.html">cd ..</a>
+
+</body>
+
+</html>
