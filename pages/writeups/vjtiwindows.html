@@ -31,22 +31,28 @@
         color: #8abeb7;
         text-decoration: none;
     }
+
+    video {
+        width: 100%; /* Makes the video fill the available width */
+        max-width: 600px; /* Optional: Maximum width to prevent it from getting too large */
+        margin-top: 20px;
+    }
 </style>
 
 <body>
     <h5>Welcome@Visitors:~/writeups$ cat 'VJTI Windows Writeup'/writeup.txt</h5>
     <hr><br>
 
-    <h4>Challenge - 1: Basic Rev 1</h4>
+    <h4 id="challenge1">Challenge - 1: Basic Rev 1</h4>
     <ol>
         <li>We just push the program into dogbolt website</li>
         <li>It decompiles and we find a strcmp condition that compares to flag</li>
         <li>We get the flag as: <pre>T915{5TR1NG5_4R3_N1C3}</pre></li>
         <li>Hence this challenge is solved</li>
     </ol>
-    <h5>---------------------------------------------------</h5>
+    <h5>-------------------------</h5>
 
-    <h4>Challenge - 2: Basic Rev 2</h4>
+    <h4 id="challenge2">Challenge - 2: Basic Rev 2</h4>
     <ol>
         <li>We just push the program onto the dogbolt website</li>
         <li>It decompiles and we find a condition for correct:
@@ -56,9 +62,9 @@
         <li>We convert these hex values to ASCII: <pre>T915{1N5TRUC710NS_4R3_B3TT3R}</pre></li>
         <li>Hence this challenge is solved</li>
     </ol>
-    <h5>---------------------------------------------------</h5>
+    <h5>-------------------------</h5>
 
-    <h4>Challenge - 3: Basic Rev 3</h4>
+    <h4 id="challenge3">Challenge - 3: Basic Rev 3</h4>
     <ol>
         <li>We push the program onto the dogbolt website to decompile it.</li>
         <li>The decompiled code shows a password validation loop:
@@ -90,9 +96,9 @@ print("Correct password:", correct_password)
         <li>Running the program with the correct input gives the flag as: <pre>T915{I_L0V3_X0R_3NCRYP710N}</pre></li>
         <li>Hence this challenge is solved.</li>
     </ol>
-    <h5>---------------------------------------------------</h5>
+    <h5>-------------------------</h5>
 
-    <h4>Challenge - 4: Web Traffic Analysis</h4>
+    <h4 id="challenge4">Challenge - 4: Web Traffic Analysis</h4>
     <ol>
         <li>We download the Wireshark packet, it's a chunky boi</li>
         <li>It has way too many packets to manually search through; also, the packets are confusing, sometimes it's torrenting, sometimes it's router logging</li>
@@ -101,6 +107,23 @@ print("Correct password:", correct_password)
         <li>We filter for POST requests: <pre>http.request.method == "POST"</pre></li>
         <li>We find a strange POST request with login credentials `admin` and `password@123`. Following the HTTP stream, we get the flag: <pre>T915{ST4HP_CR4WL1NG_MY_W3B}</pre></li>
         <li>Hence this challenge is solved</li>
+    </ol>
+
+    <h5>-------------------------</h5>
+
+    <h4 id="challenge5">Challenge - 5: Flappy Game Hacking</h4>
+    <ol>
+        <li>We download the game</li>
+        <li>Use wine to run the game in case on linux</li>
+        <li>Then we run the tool game conqueror</li>
+        <li>We just modify values to get the flag</li>
+        <li>Video: </li>
+
+        <!-- Embedded Video Player -->
+        <video controls>
+            <source src="../../source/videos/challenge5.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </ol>
 
     <br><hr><br>
