@@ -1,42 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>~/about-me</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2D2D2D;
+            --terminal-bg: rgba(0, 0, 0, 0.85);
+            --text-color: #ffffff;
+            --prompt-color: #36c84b;
+            --date-color: #64d2ff;
+            --header-gradient-start: #e8e8e8;
+            --header-gradient-end: #c4c4c4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .terminal-window {
+            background-color: var(--terminal-bg);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: linear-gradient(to bottom, var(--header-gradient-start), var(--header-gradient-end));
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 16px;
+        }
+
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: opacity 0.2s ease;
+        }
+
+        .window-button:hover {
+            opacity: 0.8;
+        }
+
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27c93f; }
+
+        .title {
+            color: #4d4d4d;
+            font-size: 14px;
+            margin: 0 auto;
+        }
+
+        .terminal-content {
+            padding: 20px;
+        }
+
+        .prompt {
+            color: var(--prompt-color);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .content {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+        }
+
+        a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        a::before {
+            content: "$ ";
+            color: var(--prompt-color);
+            margin-right: 8px;
+        }
+    </style>
 </head>
 
-<style>
-    body {
-        font-family: 'Consolas', 'Courier New', monospace;
-        background-color: #300924;
-        color: #d0d0d0;
-    }
-    a {
-        color: #8abeb7;
-        text-decoration: none;
-    }
-    p{
-        font-size: 14px;
-    }
-</style>
-
-
 <body>
-    <h5>Welcome@Visitors:~$ cd about-me/</h5>
-    <h5>Welcome@Visitors:~/about-me$ cat about-me.txt</h5>
-    <hr><br>
-
-    <p>I like cyber related stuffs</p>
-
-    <p>Dont like making website , if it wasnt obvious by now</p>
-
-    <p>Thats it...Thanks</p>
-
-    <br><hr><br>
-    <a href="../index.html">cd ..</a>
-
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="window-buttons">
+                <div class="window-button close"></div>
+                <div class="window-button minimize"></div>
+                <div class="window-button maximize"></div>
+            </div>
+            <div class="title">user@macbook-pro ~/about-me</div>
+        </div>
+        <div class="terminal-content">
+            <div class="prompt">$ cat about-me.txt</div>
+            <div class="content">
+                <p>I like cyber related stuffs</p>
+                <p>Dont like making website, used cursor to make this</p>
+                <p>Thats it...Thanks</p>
+            </div>
+            <a href="../index.html">cd ..</a>
+        </div>
+    </div>
 </body>
-
 </html>

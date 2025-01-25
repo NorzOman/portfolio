@@ -1,82 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>~/writeups</title>
+    <title>~/writeups/vjtiwindows</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2D2D2D;
+            --terminal-bg: rgba(0, 0, 0, 0.85);
+            --text-color: #ffffff;
+            --prompt-color: #36c84b;
+            --date-color: #64d2ff;
+            --header-gradient-start: #e8e8e8;
+            --header-gradient-end: #c4c4c4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .terminal-window {
+            background-color: var(--terminal-bg);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: linear-gradient(to bottom, var(--header-gradient-start), var(--header-gradient-end));
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+            margin-right: 16px;
+        }
+
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: opacity 0.2s ease;
+        }
+
+        .window-button:hover {
+            opacity: 0.8;
+        }
+
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27c93f; }
+
+        .title {
+            color: #4d4d4d;
+            font-size: 13px;
+            margin: 0 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .terminal-content {
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        h4 {
+            color: var(--prompt-color);
+            margin: 16px 0 8px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        ol {
+            margin-left: 16px;
+            margin-bottom: 16px;
+        }
+
+        ol li {
+            margin-bottom: 4px;
+        }
+
+        pre {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 6px;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        a::before {
+            content: "$ ";
+            color: var(--prompt-color);
+            margin-right: 8px;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 640px;
+            height: 360px;
+            border: none;
+            margin: 16px 0;
+            border-radius: 4px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        h5 {
+            color: var(--prompt-color);
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .terminal-window {
+                max-width: 100%;
+            }
+
+            .terminal-content {
+                padding: 12px;
+                font-size: 12px;
+            }
+
+            pre {
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
 
-<style>
-    body {
-        font-family: 'Consolas', 'Courier New', monospace;
-        background-color: #300924;
-        color: #d0d0d0;
-    }
-
-    ol, ul {
-        font-size: 12px;
-        line-height: 1.6;
-    }
-
-    pre {
-        font-size: 10px;
-    }
-
-    h4 {
-        font-size: 14px;
-    }
-
-    a {
-        color: #8abeb7;
-        text-decoration: none;
-    }
-
-    iframe {
-        width: 100%; /* Makes the iframe fill the available width */
-        max-width: 640px; /* Limits the maximum width */
-        height: 360px; /* Sets the height to a more typical aspect ratio for videos */
-        border: none;
-        margin-top: 20px;
-        display: block; /* Ensures it doesn't center, aligns with content */
-    }
-</style>
-
 <body>
-    <h5>Welcome@Visitors:~/writeups$ cat 'VJTI Windows Writeup'/writeup.txt</h5>
-    <hr><br>
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="window-buttons">
+                <div class="window-button close"></div>
+                <div class="window-button minimize"></div>
+                <div class="window-button maximize"></div>
+            </div>
+            <div class="title">user@linux ~/writeups/vjtiwindows</div>
+        </div>
+        <div class="terminal-content">
+            <h5>Welcome@Visitors:~/writeups$ cat 'VJTI Windows Writeup'/writeup.txt</h5>
+            <hr>
 
-    <h4 id="challenge1">Challenge - 1: Basic Rev 1</h4>
-    <ol>
-        <li>We just push the program into dogbolt website</li>
-        <li>It decompiles and we find a strcmp condition that compares to flag</li>
-        <li>We get the flag as: <pre>T915{5TR1NG5_4R3_N1C3}</pre></li>
-        <li>Hence this challenge is solved</li>
-    </ol>
-    <h5>-------------------------</h5>
+            <h4 id="challenge1">Challenge - 1: Basic Rev 1</h4>
+            <ol>
+                <li>We just push the program into dogbolt website</li>
+                <li>It decompiles and we find a strcmp condition that compares to flag</li>
+                <li>We get the flag as: <pre>T915{5TR1NG5_4R3_N1C3}</pre></li>
+                <li>Hence this challenge is solved</li>
+            </ol>
+            <h5>-------------------------</h5>
 
-    <h4 id="challenge2">Challenge - 2: Basic Rev 2</h4>
-    <ol>
-        <li>We just push the program onto the dogbolt website</li>
-        <li>It decompiles and we find a condition for correct:
-            <pre>if (*(arg1 - 0x64) != 0x54 || *(arg1 - 0x63) != 0x39 || *(arg1 - 0x62) != 0x31 || *(arg1 - 0x61) != 0x35.......</pre>
-        </li>
-        <li>It's just a bunch of hex values</li>
-        <li>We convert these hex values to ASCII: <pre>T915{1N5TRUC710NS_4R3_B3TT3R}</pre></li>
-        <li>Hence this challenge is solved</li>
-    </ol>
-    <h5>-------------------------</h5>
+            <h4 id="challenge2">Challenge - 2: Basic Rev 2</h4>
+            <ol>
+                <li>We just push the program onto the dogbolt website</li>
+                <li>It decompiles and we find a condition for correct:
+                    <pre>if (*(arg1 - 0x64) != 0x54 || *(arg1 - 0x63) != 0x39 || *(arg1 - 0x62) != 0x31 || *(arg1 - 0x61) != 0x35.......</pre>
+                </li>
+                <li>It's just a bunch of hex values</li>
+                <li>We convert these hex values to ASCII: <pre>T915{1N5TRUC710NS_4R3_B3TT3R}</pre></li>
+                <li>Hence this challenge is solved</li>
+            </ol>
+            <h5>-------------------------</h5>
 
-    <h4 id="challenge3">Challenge - 3: Basic Rev 3</h4>
-    <ol>
-        <li>We push the program onto the dogbolt website to decompile it.</li>
-        <li>The decompiled code shows a password validation loop:
-            <pre>if (**(arg1 - 0xc8) != (*rdx_5 ^ *(arg1 - 0x9b + rax_22))) break;</pre>
-        </li>
-        <li>It checks each input byte against a predefined byte sequence using XOR operations.</li>
-        <li>We analyze the memory initialization in the decompiled code and extract target values for validation.</li>
-        <li>We reverse the logic using a Python script:
-            <pre>
+            <h4 id="challenge3">Challenge - 3: Basic Rev 3</h4>
+            <ol>
+                <li>We push the program onto the dogbolt website to decompile it.</li>
+                <li>The decompiled code shows a password validation loop:
+                    <pre>if (**(arg1 - 0xc8) != (*rdx_5 ^ *(arg1 - 0x9b + rax_22))) break;</pre>
+                </li>
+                <li>It checks each input byte against a predefined byte sequence using XOR operations.</li>
+                <li>We analyze the memory initialization in the decompiled code and extract target values for validation.</li>
+                <li>We reverse the logic using a Python script:
+                    <pre>
 # Initialize predefined values based on the memory setup.
 predefined_values = [ord(c) for c in "mt{p"] + [0x13] + [ord(c) for c in "fxy|nz"] + [
     0x1b, 1, 0x66, 0x63, 4, 0x53, 0x7c, 0x2b, 0x1c, 0x0e
@@ -93,45 +239,42 @@ for i in range(27):
 
 # Join to form the password.
 correct_password = ''.join(input_chars)
-print("Correct password:", correct_password)
-            </pre>
-        </li>
-        <li>Running the program with the correct input gives the flag as: <pre>T915{I_L0V3_X0R_3NCRYP710N}</pre></li>
-        <li>Hence this challenge is solved.</li>
-    </ol>
-    <h5>-------------------------</h5>
+print("Correct password:", correct_password)</pre>
+                </li>
+                <li>Running the program with the correct input gives the flag as: <pre>T915{I_L0V3_X0R_3NCRYP710N}</pre></li>
+                <li>Hence this challenge is solved.</li>
+            </ol>
+            <h5>-------------------------</h5>
 
-    <h4 id="challenge4">Challenge - 4: Web Traffic Analysis</h4>
-    <ol>
-        <li>We download the Wireshark packet, it's a chunky boi</li>
-        <li>It has way too many packets to manually search through; also, the packets are confusing, sometimes it's torrenting, sometimes it's router logging</li>
-        <li>The best way to find the flag is by filtering the HTTP protocols</li>
-        <li>Set the filter as HTTP, but there are still too many packets to manually search</li>
-        <li>We filter for POST requests: <pre>http.request.method == "POST"</pre></li>
-        <li>We find a strange POST request with login credentials `admin` and `password@123`. Following the HTTP stream, we get the flag: <pre>T915{ST4HP_CR4WL1NG_MY_W3B}</pre></li>
-        <li>Hence this challenge is solved</li>
-    </ol>
+            <h4 id="challenge4">Challenge - 4: Web Traffic Analysis</h4>
+            <ol>
+                <li>We download the Wireshark packet, it's a chunky boi</li>
+                <li>It has way too many packets to manually search through; also, the packets are confusing, sometimes it's torrenting, sometimes it's router logging</li>
+                <li>The best way to find the flag is by filtering the HTTP protocols</li>
+                <li>Set the filter as HTTP, but there are still too many packets to manually search</li>
+                <li>We filter for POST requests: <pre>http.request.method == "POST"</pre></li>
+                <li>We find a strange POST request with login credentials `admin` and `password@123`. Following the HTTP stream, we get the flag: <pre>T915{ST4HP_CR4WL1NG_MY_W3B}</pre></li>
+                <li>Hence this challenge is solved</li>
+            </ol>
 
-    <h5>-------------------------</h5>
+            <h5>-------------------------</h5>
 
-    <h4 id="challenge5">Challenge - 5: Flappy Game Hacking</h4>
-    <ol>
-        <li>We download the game</li>
-        <li>Use wine to run the game in case on Linux</li>
-        <li>Then we run the tool game conqueror</li>
-        <li>We just modify values to get the flag</li>
-        <li>Video: </li>
+            <h4 id="challenge5">Challenge - 5: Flappy Game Hacking</h4>
+            <ol>
+                <li>We download the game</li>
+                <li>Use wine to run the game in case on Linux</li>
+                <li>Then we run the tool game conqueror</li>
+                <li>We just modify values to get the flag</li>
+                <li>Video: </li>
 
-        <!-- Embedded YouTube Video Player with highest resolution -->
-        <iframe src="https://www.youtube.com/embed/F9Qm2eVtkSM?autohide=1&showinfo=0&rel=0&vq=hd1080" 
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen></iframe>
-    </ol>
+                <iframe src="https://www.youtube.com/embed/F9Qm2eVtkSM?autohide=1&showinfo=0&rel=0&vq=hd1080" 
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            </ol>
 
-    <br><hr><br>
-
-    <a href="../writeups.html">cd ..</a>
-
+            <br><hr>
+            <a href="../writeups.html">cd ..</a>
+        </div>
+    </div>
 </body>
-
 </html>
